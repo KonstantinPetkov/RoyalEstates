@@ -1,22 +1,61 @@
-import { Component } from '@angular/core';
-import { Platform } from 'ionic-angular';
+import { Component, ViewChild  } from '@angular/core';
+import { Nav, Platform, Events } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
-
-import { TabsPage } from '../pages/tabs/tabs';
+import { MyEstatesPage } from "../pages/pages";
+import { LocationsPage, EstatesPage, EstateHomePage } from "../pages/pages";
+import { EstatePersistanceProvider } from "../providers/estate-persistance/estate-persistance";
+import { RoyalEstatesApiProvider } from "../providers/royal-estates-api/royal-estates-api";
 
 @Component({
   templateUrl: 'app.html'
 })
 export class MyApp {
-  rootPage:any = TabsPage;
+  @ViewChild(Nav) nav: Nav;
+  rootPage: any = MyEstatesPage;
+  estates = [];
 
-  constructor(platform: Platform, statusBar: StatusBar, splashScreen: SplashScreen) {
-    platform.ready().then(() => {
+  constructor(
+    public platform: Platform,
+    public statusBar: StatusBar,
+    public splashScreen: SplashScreen,
+    public persistance: EstatePersistanceProvider,
+    public customApi: RoyalEstatesApiProvider,
+    public events: Events
+  ) {
+    this.initializeApp();
+    this.estates = this.persistance.getSavedEstates();
+    events.subscribe("savedEstates:updated", data => {
+      events.unsubscribe("savedEstates:updated");
+      this.estates = this.persistance.getSavedEstates();
+    });
+  }
+
+  initializeApp() {
+    this.platform.ready().then(() => {
       // Okay, so the platform is ready and our plugins are available.
       // Here you can do any higher level native things you might need.
-      statusBar.styleDefault();
-      splashScreen.hide();
+      this.statusBar.styleDefault();
+      this.splashScreen.hide();
     });
+  }
+
+  itemTapped($event, item) {
+    this.customApi.setCurrentEstate(item);
+    this.nav.push(EstateHomePage, { item: item });
+  }
+
+  openPage(page) {
+    // Reset the content nav to have just this page
+    // we wouldn't want the back button to show in this scenario
+    this.nav.setRoot(page.component);
+  }
+
+  goToLocations() {
+    this.nav.push(LocationsPage);
+  }
+
+  goToSavedEstates() {
+    this.nav.push(EstatesPage);
   }
 }
