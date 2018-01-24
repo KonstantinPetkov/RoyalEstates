@@ -19,7 +19,7 @@ import "rxjs/add/observable/of";
 export class RoyalEstatesApiProvider {
 
   private baseUrl = "https://royal-estates-48832.firebaseio.com/";
-
+  //private estateData = {};
   estate: any;
   location: any;
 

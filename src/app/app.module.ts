@@ -39,7 +39,7 @@ import { EstatePersistanceProvider } from '../providers/estate-persistance/estat
     IonicModule.forRoot(MyApp),
     IonicStorageModule.forRoot(),
     AgmCoreModule.forRoot({
-      apiKey: 'AIzaSyDc4OI_H9wLBTycrCP4WjCbc24o02iWBaM'
+      apiKey: 'AIzaSyAknvATkcL0yuO47E6DhDc96NTiz6JbuY4'
     }),
     HttpClientModule
   ],
@@ -63,3 +63,5 @@ import { EstatePersistanceProvider } from '../providers/estate-persistance/estat
   ]
 })
 export class AppModule {}
+
+//apiKey: 'AIzaSyD7KBgGvEQbHK-g5YuQ2jq4Ctt2qVE_hxs'
